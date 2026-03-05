@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width", initial-scale="1.0">
+    <title>Wether Forcast</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <script>
+        function SearchClick(){
+            var cityname = document.getElementById("txtCity").value;
+            var url = `https://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=1318ca6725c69160d346c41fc0612596&units=metric`;
+
+
+            fetch(url)
+            .then(function(response){
+                return response.json();
+            })
+            .then(function(data){
+                document.getElementById("lblCity").innerHTML = data.name;
+                document.getElementById("lblTemp").innerHTML = `<span class="bi bi-thermometer"></span> ${data.main.temp} &deg; C`;
+
+                var icon = "";
+                if(data.weather[0].description == "clear sky") {
+                    icon = "bi-brightness-high";
+                } else if(data.main.temp >= 15 && data.main.temp <= 20) {
+                    icon = "bi-cloud-sun";
+                } else {
+                    icon = "bi-cloud-rain";
+                }
+                document.getElementById("lblDescription").innerHTML = `<span class="bi ${icon}"></span> ${data.weather[0].description.toUpperCase()}`;
+            })
+
+        }
+    </script>
+</head>
+<body class="container-fluid d-flex justify-content-center align-items-center bg-secondary" style="height: 100vh; font-family: Arial, Helvetica, sans-serif">
+    <div class="bg-light p-5 w-50 rounded-4" style="height: 450px">
+        <div class="input-group p-3">
+            <input type="text" id="txtCity" placeholder="Enter city name" class="form-control">
+            <button onclick="SearchClick()" class="btn btn-warning bi bi-search"></button>
+        </div>
+        <div>
+            <div class="my-4 fs-2 p-1" id="lblCity"></div>
+            <div class="my-3 fs-4 p-1" id="lblTemp"></div>
+            <div class="my-3 fs-4 p- fw-bold" id="lblDescription"></div>
+        <div class="d-flex flex-column align-items-center gap-3 mt-4">
+            <div class="fs-2" id="lblCity"></div>
+            <div class="fs-4" id="lblTemp"></div>
+            <div class="fs-4 fw-bold" id="lblDescription"></div>
+        </div>
+    </div>
+</body>
+</html>
